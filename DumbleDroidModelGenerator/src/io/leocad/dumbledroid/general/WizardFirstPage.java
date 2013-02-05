@@ -6,11 +6,7 @@ import io.leocad.dumbledroid.generator.ClassGenerator;
 import io.leocad.dumbledroid.generator.JSONParser;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -51,7 +47,6 @@ public class WizardFirstPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		// TODO Auto-generated method stub
 		container = new Composite(parent, SWT.NULL);
 		RowLayout layout = new RowLayout();
 		container.setLayout(layout);
@@ -62,17 +57,20 @@ public class WizardFirstPage extends WizardPage {
 	    {
 	        IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
 	        Object firstElement = selection.getFirstElement();
-	        if(firstElement instanceof IFile){
+	        
+	       if (firstElement instanceof IAdaptable) {
 	        	
-	        	IFile file = (IFile) firstElement;
-	        	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		        IResource resource = root.findMember(file.getProject().getProjectRelativePath());
-		        absolutePath = resource.getProject().getLocation().toPortableString();
-		        
-	        } else if (firstElement instanceof IAdaptable) {
-
-	            IProject project = (IProject)((IAdaptable)firstElement).getAdapter(IProject.class);
-	            absolutePath = project.getLocation().toPortableString();
+	        	IResource resource = (IResource)((IAdaptable)firstElement).getAdapter(IResource.class);
+	            absolutePath = resource.getLocation().toPortableString();
+	            
+	            int lastSlash = absolutePath.lastIndexOf("/");
+	            String lastWord = absolutePath.substring(lastSlash);
+	            
+	            if(lastWord.contains(".")){
+	            	absolutePath = absolutePath.substring(0,lastSlash)+"/";
+	            }else{
+	            	absolutePath += "/";
+	            }
 	            
 	        }
 	    }
