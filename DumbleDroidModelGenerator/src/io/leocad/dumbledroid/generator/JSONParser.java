@@ -10,7 +10,8 @@ import org.json.JSONObject;
 
 public class JSONParser {
 	
-	private static ArrayList<String> arrayNames = new ArrayList<String>();
+	public static ArrayList<String> arrayNames = new ArrayList<String>();
+	public static ArrayList<String> originalNames = new ArrayList<String>();
 	
 	public static void preParseJSONObject(JSONObject jsonObject) throws JSONException{
 		Iterator keys = jsonObject.keys();
@@ -29,6 +30,7 @@ public class JSONParser {
 					String name = keyString.substring(0, 1).toUpperCase() + keyString.substring(1,(keyString.length()-1)).toLowerCase();			
 					
 					arrayNames.add(name);
+					originalNames.add(keyString);
 				}
 			}
 			
